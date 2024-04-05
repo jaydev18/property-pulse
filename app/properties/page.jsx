@@ -1,7 +1,18 @@
 import React from "react";
-import properties from "@/properties.json";
 import PropertyCard from "@/components/PropertyCard";
-const PropertyPage = () => {
+async function fetchProperties() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties`);
+    if (!res.ok) {
+      throw new Error("Failed to fetch the data");
+    }
+    return res.json();
+  } catch (error) {
+    console.log(error);
+  }
+}
+const PropertyPage = async () => {
+  const properties = await fetchProperties();
   return (
     <section className="px-4 py-6">
       <div className="container-xl lg:container m-auto px-4 py-6">
