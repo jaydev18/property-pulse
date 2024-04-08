@@ -6,10 +6,13 @@ import profileDefault from "@/assets/images/profile.png";
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 const Navbar = () => {
+  const { data: session } = useSession();
+
   const [isMobilemenuOpen, setIsMobileOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileOpen] = useState(false);
-
+  const [isLoggedIn, setLoggedIn] = useState(false);
   const pathname = usePathname();
 
   return (
