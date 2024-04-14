@@ -34,9 +34,62 @@ function PropertyAddForm() {
     setMounted(true);
   }, []);
 
-  const handleChange = () => {};
-  const handleAmenitiesChange = () => {};
-  const handleImageChange = () => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    //check if nested property
+    if (name.includes(".")) {
+      const [outerKey, innerKey] = name.split(".");
+      setFields((prevFields) => ({
+        ...prevFields,
+        [outerKey]: {
+          ...prevFields[outerKey],
+          [innerKey]: value,
+        },
+      }));
+    } else {
+      //not nested property
+      setFields((prevFields) => ({
+        ...prevFields,
+        [name]: value,
+      }));
+    }
+  };
+  const handleAmenitiesChange = (e) => {
+    const { value, checked } = e.target;
+
+    //clone the current array
+    const updatedAmenities = [...fields.amenities];
+    if (checked) {
+      //add value to array
+      updatedAmenities.push(value);
+    } else {
+      //remove value form array
+      const index = updatedAmenities.indexOf(value);
+      if (index !== -1) {
+        updatedAmenities.splice(index, 1);
+      }
+    }
+    //update state with update array
+    setFields((prevFields) => ({
+      ...prevFields,
+      amenities: updatedAmenities,
+    }));
+  };
+  const handleImageChange = (e) => {
+    const { files } = e.target;
+    //clone image array
+    const updatedImages = [...fields.images];
+
+    //Add new file to the array
+    for (const file of files) {
+      updatedImages.push(file);
+    }
+    //update state with array of images
+    setFields((prevFields) => ({
+      ...prevFields,
+      images: updatedImages,
+    }));
+  };
 
   return (
     mounted && (
